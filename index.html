@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZATCA Compliance Finder | Zid</title>
+    <style>
+        :root {
+            /* Zid Brand Colors */
+            --primary-color: #583395; /* Zid Purple */
+            --primary-hover: #452674;
+            --accent-color: #00d1c1; /* Zid Teal */
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #2d2d2d;
+            --text-secondary: #637381;
+            --border-color: #dfe3e8;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Card Container */
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(88, 51, 149, 0.08);
+            padding: 40px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-placeholder {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        .badge {
+            background: #eee;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Steps & Animation */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 24px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        /* Options */
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .option-card {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            position: relative;
+        }
+        .option-card:hover {
+            border-color: var(--primary-color);
+            background-color: #fcfaff;
+        }
+        .option-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        .option-card p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-sizing: border-box;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+        .btn-outline:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+        .btn-link {
+            background: none;
+            color: var(--primary-color);
+            text-decoration: underline;
+            padding: 0;
+            width: auto;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        /* Result Styles */
+        .result-box {
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .result-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .erp-bg { background-color: #fff5f5; border: 1px solid #fed7d7; }
+        .erp-text { color: #c53030; }
+        
+        .app-bg { background-color: #eff6ff; border: 1px solid #bfdbfe; }
+        .app-text { color: #1e40af; }
+        
+        .native-bg { background-color: #f0fdf4; border: 1px solid #bbf7d0; }
+        .native-text { color: #166534; }
+
+        /* Wafilegal Footer */
+        .legal-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafafa;
+            margin-left: -40px;
+            margin-right: -40px;
+            margin-bottom: -40px;
+            padding: 20px 40px;
+        }
+        .legal-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .legal-btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legal-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 4px;
+            background: #eee;
+            margin-bottom: 30px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 25px; margin: 10px; }
+            .legal-footer { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header Logo Area -->
+    <div class="header">
+        <div class="logo-placeholder">zid</div>
+        <span class="badge">ZATCA Helper</span>
+    </div>
+
+    <!-- STEP 1: Intro -->
+    <div id="step-1" class="step active">
+        <h1 style="text-align: center;">ZATCA Compliance Check</h1>
+        <p style="text-align: center;">
+            Don't risk compliance errors. Answer 2 quick questions to find the perfect integration for your specific business size.
+        </p>
+        <button class="btn" onclick="nextStep(2)">Start Diagnostic</button>
+    </div>
+
+    <!-- STEP 2: ERP Question -->
+    <div id="step-2" class="step">
+        <h2>Do you use an external ERP?</h2>
+        <p>Do you use accounting software like Odoo, Qoyod, Oracle, Xero, or Microsoft Dynamics?</p>
+        
+        <div class="options-grid">
+            <div class="option-card" onclick="showResult('erp')">
+                <h3>Yes, I have an ERP</h3>
+                <p>I manage invoices outside of Zid.</p>
+            </div>
+            <div class="option-card" onclick="nextStep(3)">
+                <h3>No, just Zid</h3>
+                <p>I rely solely on Zid for my store.</p>
+            </div>
+        </div>
+        <button class="btn btn-link" onclick="nextStep(1)">Back</button>
+    </div>
+
+    <!-- STEP 3: Order Type Question -->
+    <div id="step-3" class="step">
+        <h2>Order Volume & Payment</h2>
+        <p>Does your store match either of these conditions?</p>
+        <ul style="color:var(--text-secondary); font-size:14px; margin-bottom:20px;">
+            <li>You accept <b>Cash on Delivery (COD)</b></li>
+            <li>You have <b>High Returns</b> or <b>50+ Orders/Day</b></li>
+        </ul>
+
+        <div class="options-grid">
+            <div class="option-card" onclick="showResult('advanced')">
+                <h3>Yes</h3>
+                <p>I use COD or have high daily volume.</p>
+            </div>
+            <div class="option-card" onclick="showResult('native')">
+                <h3>No</h3>
+                <p>Most orders are Prepaid & Low volume.</p>
+            </div>
+        </div>
+        <button class="btn btn-link" onclick="nextStep(2)">Back</button>
+    </div>
+
+    <!-- RESULT: ERP -->
+    <div id="result-erp" class="step">
+        <div class="result-box erp-bg">
+            <span class="result-icon">⚠️</span>
+            <h2 class="erp-text">Do Not Use Zid Native</h2>
+            <p>Since you have an ERP, it must be the "Master" for tax compliance. Using Zid's native tool will create duplicate or conflicting invoices.</p>
+        </div>
+        <a href="https://apps.zid.sa/applications?term=erp&app_category_id=2" target="_blank" class="btn">Find Your ERP Connector</a>
+        <p style="text-align: center; margin-top: 15px; font-size: 13px;">
+            Search for "Qoyod", "Odoo", or your specific system in the Zid App Market.
+        </p>
+        <button class="btn btn-outline" onclick="location.reload()">Start Over</button>
+    </div>
+
+    <!-- RESULT: Advanced Apps -->
+    <div id="result-advanced" class="step">
+        <div class="result-box app-bg">
+            <span class="result-icon">🚀</span>
+            <h2 class="app-text">Recommended: Specialized App</h2>
+            <p>Your workflow (COD or High Volume) requires advanced triggers. Zid's native tool may generate invoices too early (before delivery).</p>
+        </div>
+        <p style="text-align: center; font-weight: bold; margin-bottom: 10px;">We recommend these Zid Certified Apps:</p>
+        <div class="options-grid">
+            <a href="https://apps.zid.sa/application/1446" target="_blank" style="text-decoration:none;" class="option-card">
+                <h3>InvoiceQ</h3>
+                <p>Best for High Volume & COD control.</p>
+            </a>
+            <a href="https://apps.zid.sa/applications?term=zatca&app_category_id=2" target="_blank" style="text-decoration:none;" class="option-card">
+                <h3>FatooraTech / Deqa</h3>
+                <p>View all compatible ZATCA apps.</p>
+            </a>
+        </div>
+        <button class="btn btn-outline" onclick="location.reload()">Start Over</button>
+    </div>
+
+    <!-- RESULT: Native -->
+    <div id="result-native" class="step">
+        <div class="result-box native-bg">
+            <span class="result-icon">✅</span>
+            <h2 class="native-text">Use Zid Native Tool</h2>
+            <p>Your store fits the standard compliance model. You can safely enable ZATCA directly in your Zid dashboard settings without extra costs.</p>
+        </div>
+        <a href="https://web.zid.sa" target="_blank" class="btn">Go to Zid Dashboard</a>
+        <button class="btn btn-outline" onclick="location.reload()">Check Another Store</button>
+    </div>
+
+    <!-- Wafilegal Integration Footer -->
+    <div class="legal-footer">
+        <div class="legal-info">
+            <strong>Need Legal Help?</strong><br>
+            Ask Wafi, the AI Legal Assistant.
+        </div>
+        <a href="https://wafilegal.com" target="_blank" class="legal-btn">
+            Chat with Wafi
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+    </div>
+
+</div>
+
+<script>
+    // Simple State Management
+    function nextStep(stepNum) {
+        // Hide all steps
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        // Show target step
+        document.getElementById('step-' + stepNum).classList.add('active');
+        
+        // Update Progress Bar
+        let progress = 0;
+        if(stepNum === 2) progress = 33;
+        if(stepNum === 3) progress = 66;
+        document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    function showResult(resultType) {
+        // Hide all steps
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        // Show result
+        document.getElementById('result-' + resultType).classList.add('active');
+        // Finish Progress Bar
+        document.getElementById('progressBar').style.width = '100%';
+    }
+</script>
+
+</body>
+</html>
